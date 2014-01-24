@@ -21,5 +21,6 @@ public interface JobRepsitory extends PagingAndSortingRepository<Job, Long> {
 	
 	List<Job> findByTitle(String title);
 
+	public Iterable<Job> getSortedJobs();
 
 }
