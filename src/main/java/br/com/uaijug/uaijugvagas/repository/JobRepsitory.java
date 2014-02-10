@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.uaijug.uaijugvagas.entities.Job;
 
@@ -18,9 +20,6 @@ public interface JobRepsitory extends PagingAndSortingRepository<Job, Long> {
 	*            o job
 	* @return estados encontrados
 	*/
-	
-	List<Job> findByTitle(String title);
 
-	public Iterable<Job> getSortedJobs();
-
+	public List<Job> findByTitle(String title);
 }
