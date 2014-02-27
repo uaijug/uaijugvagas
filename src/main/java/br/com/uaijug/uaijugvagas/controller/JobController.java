@@ -27,7 +27,7 @@ public class JobController {
 	  
 	  @RequestMapping(value="/job", method = RequestMethod.POST)
 	  @ResponseBody
-	  public void fazerPedido(@RequestBody Job job) {
+	  public void pushJob(@RequestBody Job job) {
 		repository.save(job);
 	  }
 }
