@@ -33,9 +33,6 @@
 </script>
 </head>
 <body ng-controller="JobController">
-	<div style="text-align: center; margin: 20px;">
-		<a href="http://www.agilecode.com.br"></a>
-	</div>
 	<div class="well" style="width: 700px; margin-top: 60px; margin-left: auto; margin-right: auto;">
 		<table class="table table-striped">
 			<tr>
