@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html ng-app>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -9,6 +9,9 @@
 <script>
 	function JobController($scope, $http) {
 		$scope.jobs = [];
+		$scope.job = {};
+
+		var oriJob = angular.copy($scope.job);
 
 		$scope.loadJobs = function() {
 			$http.get('jobs').success(function(jobs) {
@@ -16,16 +19,30 @@
 			});
 		};
 
-		$scope.submitJob = function(isValid) {
-			if (isValid) {
-				var job = angular.copy($scope.job);
+		$scope.submitJob = function(form) {
+			$scope.submitted = true;
 
-				$http.post('job', job).success(function() {
-					$scope.jobs.push(job);
-
-					$('#jobModalForm').modal('hide');
-				});
+			if (form.$invalid) {
+				return;
 			}
+
+			var job = angular.copy($scope.job);
+
+			$http.post('job', job).success(function() {
+				$scope.jobs.push(job);
+
+				$('#jobModalForm').modal('hide');
+
+				$scope.reset();
+			});
+		};
+
+		$scope.reset = function() {
+			$scope.submitted = false;
+
+			$scope.job = angular.copy(oriJob);
+
+			$scope.addJobForm.$setPristine();
 		};
 
 		$scope.loadJobs();
@@ -62,31 +79,31 @@
 				</div>
 				<div class="modal-body">
 					<form name="addJobForm" novalidate>
-						<div class="form-group" ng-class="{'has-error': addJobForm.company.$invalid && addJobForm.company.$dirty}">
+						<div class="form-group" ng-class="{'has-error': submitted && addJobForm.company.$error.required}">
 							<input type="text" class="form-control" style="width: 480px;" ng-model="job.company" name="company" placeholder="Empresa" ng-required="true" />
-							<p ng-show="addJobForm.company.$invalid && addJobForm.company.$dirty" class="help-block">O campo Empresa é obrigatorio</p>
+							<p ng-show="submitted && addJobForm.company.$error.required" class="help-block">O campo Empresa é obrigatorio</p>
 						</div>
-						<div class="form-group" ng-class="{'has-error': addJobForm.description.$invalid && addJobForm.description.$dirty}">
-							<input type="text" class="form-control" style="width: 480px;" ng-model="job.description" name="description" placeholder="Descrição" ng-required="true" />
-							<p ng-show="addJobForm.description.$invalid && addJobForm.description.$dirty" class="help-block">O campo Descrição é obrigatorio</p>
+						<div class="form-group" ng-class="{'has-error': submitted && addJobForm.description.$error.required}">
+							<!--<input type="text" class="form-control" style="width: 480px;" ng-model="job.description" name="description" placeholder="Descrição" ng-required="true" />  -->
+							<textarea rows="5" style="width: 480px;" class="form-control" ng-model="job.description" name="description" placeholder="Descrição" ng-required="true"></textarea>
+							<p ng-show="submitted && addJobForm.description.$error.required" class="help-block">O campo Descrição é obrigatorio</p>
 						</div>
-						<div class="form-group" ng-class="{'has-error': addJobForm.email.$invalid && addJobForm.email.$dirty}">
+						<div class="form-group" ng-class="{'has-error': submitted && (addJobForm.email.$error.required || addJobForm.email.$error.email)}">
 							<input type="email" class="form-control" style="width: 480px;" ng-model="job.email" name="email" placeholder="Email" ng-required="true" />
-							<p ng-show="addJobForm.email.$invalid && addJobForm.email.$dirty" class="help-block">O campo Email é obrigatorio ou não é um email válido</p>
+							<p ng-show="submitted && (addJobForm.email.$error.required || addJobForm.email.$error.email)" class="help-block">O campo Email é obrigatorio ou não é um email válido</p>
 						</div>
-						<div class="form-group" ng-class="{'has-error': addJobForm.position.$invalid && addJobForm.position.$dirty}">
+						<div class="form-group" ng-class="{'has-error': submitted && addJobForm.position.$error.required}">
 							<input type="text" class="form-control" style="width: 350px;" ng-model="job.position" name="position" placeholder="Cargo" ng-required="true" />
-							<p ng-show="addJobForm.position.$invalid && addJobForm.position.$dirty" class="help-block">O campo Cargo é obrigatorio</p>
+							<p ng-show="submitted && addJobForm.position.$error.required" class="help-block">O campo Cargo é obrigatorio</p>
 						</div>
-						<div class="form-group" ng-class="{'has-error': addJobForm.title.$invalid && addJobForm.title.$dirty}">
+						<div class="form-group" ng-class="{'has-error': submitted && addJobForm.title.$error.required}">
 							<input type="text" class="form-control" style="width: 350px;" ng-model="job.title" name="title" placeholder="Titulo" ng-required="true" />
-							<p ng-show="addJobForm.title.$invalid && addJobForm.title.$dirty" class="help-block">O campo Titulo é obrigatorio</p>
+							<p ng-show="submitted && addJobForm.title.$error.required" class="help-block">O campo Titulo é obrigatorio</p>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-					<button type="button" class="btn btn-primary" ng-click="submitJob(addJobForm.$valid)" ng-disabled="addJobForm.$invalid">Salvar</button>
+					<button type="button" class="btn btn-primary" ng-click="submitJob(addJobForm)">Salvar</button>
 				</div>
 			</div>
 		</div>
