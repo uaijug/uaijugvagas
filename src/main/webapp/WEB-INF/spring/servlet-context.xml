@@ -20,7 +20,7 @@
 	<context:component-scan base-package="br.com.uaijug" />
 
 	<!-- Configuração do spring data -->
-	<jpa:repositories base-package="br.com.uaijug.repository" />
+	<jpa:repositories base-package="br.com.uaijug.uaijugvagas.repository" />
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -29,12 +29,11 @@
 	</bean>
 
 	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		destroy-method="close">
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/uaijugvagas" />
 		<property name="username" value="root" />
-		<property name="password" value="admin" />
+		<property name="password" value="leopardo2014" />
 	</bean>
 
 	<bean id="entityManagerFactory"
@@ -54,7 +53,7 @@
 	</bean>
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="sessionFactory" ref="mySessionFactory" />
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
 	<tx:annotation-driven transaction-manager="transactionManager" />

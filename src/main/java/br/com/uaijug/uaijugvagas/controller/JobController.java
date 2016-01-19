@@ -27,7 +27,8 @@ public class JobController {
 	  
 	  @RequestMapping(value="/job", method = RequestMethod.POST)
 	  @ResponseBody
-	  public void fazerPedido(@RequestBody Job job) {
+	  public void addJob(@RequestBody Job job) {
+		//curl -i -H "Content-Type: application/json" -X POST -d '{"empresa":"kjlk","descricao":"kjk","email":"kjk","cargo":"kjk","titulo":"kj"}' http://localhost:8080/UaiJUGVagas/job
 		repository.save(job);
 	  }
 }

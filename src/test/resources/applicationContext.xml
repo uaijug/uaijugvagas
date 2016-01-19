@@ -17,19 +17,27 @@
 	<!-- Configuração do contexto -->
 	<context:property-placeholder location="test.properties" />
 	<context:annotation-config />
-	<context:component-scan base-package="br.com.uaijugvagas" />
+	<context:component-scan base-package="br.com.uaijug" />
 
 	<!-- Configuração do spring data -->
-	<jpa:repositories base-package="br.com.uaijugvagas.repository" />
+	<jpa:repositories base-package="br.com.uaijug.uaijugvagas.repository" />
 
 	<!-- Configuração de transações anotadas -->
 	<tx:annotation-driven />
-	
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driver_className}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
 	<!-- Configuração do JPA -->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="packagesToScan" value="br.com.uaijugvagas" />
+		<property name="packagesToScan" value="br.com.uaijug" />
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 				<property name="showSql" value="${hibernate.show_sql}" />
@@ -44,18 +52,11 @@
 		</property>
 	</bean>
 
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${jdbc.driver_className}" />
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
-	</bean>
-	
 	<!-- Configuração de transações anotadas -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
+
 	<tx:annotation-driven transaction-manager="transactionManager" />
- 
+
 </beans>
